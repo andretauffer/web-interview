@@ -12,5 +12,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
   },
-  rules: {},
+  rules: {
+    semi: ["error", "always"],
+    quotes: ["error", "double"]
+  },
 }

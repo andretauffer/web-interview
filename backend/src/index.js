@@ -1,12 +1,21 @@
-const express = require('express')
-const cors = require('cors')
-const app = express()
+require('dotenv').config()
 
-app.use(cors())
-app.use(express.json())
+const express = require("express");
+const cors = require("cors");
+const app = express();
+const { lists } = require("./controllers");
 
-const PORT = 3001
+app.use(cors());
+app.use(express.json());
 
-app.get('/', (req, res) => res.send('Hello World!'))
+const PORT = 3001;
 
-app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
+app.get("/lists", lists.getLists);
+
+app.post("/lists", lists.postList);
+
+app.put("/lists", lists.putList);
+
+app.delete("/lists", lists.putList);
+
+app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
