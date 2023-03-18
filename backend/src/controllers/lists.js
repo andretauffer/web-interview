@@ -6,7 +6,7 @@ const storagePath = process.env.storagePath;
 const db = new JSONdb(storagePath);
 
 
-const getLists = async ({ res }) => {
+const getLists = async (_, res) => {
   try {
 
     const lists = db.JSON();
@@ -18,7 +18,7 @@ const getLists = async ({ res }) => {
   }
 };
 
-const getList = async ({ res, req }) => {
+const getList = async (req, res) => {
   try {
     const { id } = req;
 
@@ -33,7 +33,7 @@ const getList = async ({ res, req }) => {
   }
 };
 
-const postList = async ({ req, res }) => {
+const postList = async (req, res) => {
   try {
 
     const { body } = req;
@@ -49,7 +49,7 @@ const postList = async ({ req, res }) => {
   }
 };
 
-const putList = async ({ req, res }) => {
+const putList = async (req, res) => {
   try {
 
     const { body } = req;
@@ -65,7 +65,7 @@ const putList = async ({ req, res }) => {
   }
 };
 
-const deleteList = async ({ req, res }) => {
+const deleteList = async (req, res) => {
   try {
     await db.delete(req.id);
 

@@ -2,7 +2,8 @@
   "scripts": {
     "lint": "eslint --ext .js src",
     "start": "node src/index.js",
-    "test": "jest"
+    "test": "jest --watch --detectOpenHandles",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "cors": "^2.8.5",

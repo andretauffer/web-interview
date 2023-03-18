@@ -1,6 +1,5 @@
 process.env.storagePath = "./__mocks__/storage.json";
 
-// const lists = require("./lists");
 const JSONdb = require("simple-json-db");
 
 const db = new JSONdb(process.env.storagePath);
@@ -21,14 +20,14 @@ const mockData = {
     ]
   }
 };
+
 describe("the api endpoints", () => {
   let lists;
 
   beforeAll(async () => {
-    process.env.storagePath = "./__mocks__/storage.json";
     const promises = Object.keys(mockData).map(listId => db.set(listId, mockData[listId]));
     await Promise.all(promises);
-    
+
     lists = require("./lists");
 
   });
@@ -48,7 +47,7 @@ describe("the api endpoints", () => {
         send: (r) => resp = r
       };
 
-      await lists.getLists({ res });
+      await lists.getLists({}, res);
 
       expect(resp).toEqual(
         expect.objectContaining({
@@ -70,7 +69,7 @@ describe("the api endpoints", () => {
 
       const req = { id: "0000000001" };
 
-      await lists.getList({ req, res });
+      await lists.getList(req, res);
 
       expect(resp).toEqual(
         expect.objectContaining({ "id": "0000000001" })
@@ -86,7 +85,7 @@ describe("the api endpoints", () => {
 
       const req = { id: "notThere" };
 
-      await lists.getList({ req, res });
+      await lists.getList(req, res);
 
       expect(resp).toEqual(`No list was found with id: ${req.id}`);
     });
@@ -112,11 +111,11 @@ describe("the api endpoints", () => {
         }
       };
 
-      await lists.postList({ req, res });
+      await lists.postList(req, res);
 
       expect(typeof resp.id).toEqual("string");
 
-      await lists.getList({ req: { id: resp.id }, res });
+      await lists.getList({ id: resp.id }, res);
 
       expect(resp).toEqual(
         expect.objectContaining({
@@ -149,11 +148,11 @@ describe("the api endpoints", () => {
         }
       };
 
-      await lists.putList({ req, res });
+      await lists.putList(req, res);
 
       expect(typeof resp.id).toEqual("string");
 
-      await lists.getList({ req: { id }, res });
+      await lists.getList({ id }, res);
 
       expect(resp).toEqual(req.body);
     });
@@ -176,11 +175,11 @@ describe("the api endpoints", () => {
         id: id
       };
 
-      await lists.deleteList({ req, res });
+      await lists.deleteList(req, res);
 
       expect(resp).toEqual(200);
 
-      await lists.getList({ req: { id }, res });
+      await lists.getList({ id }, res);
 
       expect(resp).toEqual(`No list was found with id: ${id}`);
     });
