@@ -1,3 +1,5 @@
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -7,3 +9,11 @@ export const parameters = {
     },
   },
 }
+
+export const decorators = [
+  (Story) => (
+		<LocalizationProvider dateAdapter={AdapterMoment}>
+      <Story />
+    </LocalizationProvider>
+  ),
+];

@@ -17,8 +17,16 @@ export const Populated = Template.bind({});
 Populated.args = {
 	todoList: {
 		todos: [
-			"First do this",
-			"Then do that"
+			{
+				task: "First do this",
+				done: false,
+				deadline: new Date().getTime() + 10000
+			},
+			{
+				task: "Then do that",
+				done: true,
+				deadline: null
+			}
 		]
 	},
 	saveTodoList
@@ -51,7 +59,9 @@ Empty.play = async ({ canvasElement }) => {
 	await expect(newTodo).toBeInTheDocument();
 	const newTodoTextField = await canvas.findByTitle("todo-0-textField");
 	const input = newTodoTextField.querySelector("input");
-	userEvent.type(input, "something new to be done");
+	const textInput = "something new to be done";
+	userEvent.type(input, textInput);
+	expect(input.value).toEqual(textInput);
 	const removeTodo = await canvas.findByTitle("Remove todo 0");
 	await userEvent.click(removeTodo);
 
