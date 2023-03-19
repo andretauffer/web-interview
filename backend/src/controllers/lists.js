@@ -24,7 +24,7 @@ const getList = async (req, res) => {
 
     const list = db.get(id);
 
-    if (!list) return res.send(`No list was found with id: ${id}`)
+    if (!list) return res.send(`No list was found with id: ${id}`);
 
     res.send(list);
   } catch (error) {
@@ -74,7 +74,7 @@ const deleteList = async (req, res) => {
     console.error("Faile to put list", error);
     res.send({ error });
   }
-}
+};
 
 module.exports = {
   getLists,

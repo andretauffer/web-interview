@@ -131,9 +131,7 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
 												title={`Date picker for todo ${index}`}
 												id={`Date picker for todo ${index}`}
 												onChange={(date) => {
-													console.log("the new date", date);
 													if (date && date.unix()) {
-														console.log("the new date", date, date.unix());
 														onChange({ index, todo: { ...todos[index], deadline: date.unix() * 1000 } });
 													}
 												}}
@@ -149,7 +147,6 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
 													onChange({ index, todo: { ...todos[index], deadline: null } });
 												}}
 											>
-												{console.log("what is thw deadline then?", deadline)}
 												{deadline &&
 													<BackspaceIcon
 														color="deleteAction"

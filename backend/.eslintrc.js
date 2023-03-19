@@ -9,6 +9,16 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
+  "overrides": [
+    {
+      "files": [
+        "**/*.test.js",
+      ],
+      "env": {
+        "jest": true
+      }
+    }
+  ],
   parserOptions: {
     ecmaVersion: 2018,
   },
