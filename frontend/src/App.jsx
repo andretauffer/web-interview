@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const MainAppBar = () => {
+export const MainAppBar = () => {
 	return (
 		<AppBar position='static' color='primary'>
 			<Toolbar>
@@ -17,20 +17,24 @@ const MainAppBar = () => {
 	);
 };
 
-const mainWrapperStyle = { display: "flex", flexDirection: "column" };
-const centerContentWrapper = { display: "flex", justifyContent: "center" };
-const contentWrapperStyle = {
+export const mainWrapperStyle = {
+	display: "flex",
+	flexDirection: "column",
+};
+export const centerContentWrapper = { display: "flex", justifyContent: "center" };
+export const contentWrapperStyle = {
 	display: "flex",
 	flexDirection: "column",
 	maxWidth: "80rem",
 	flexGrow: 1,
 };
 
-const theme = createTheme({
+export const theme = createTheme({
 	palette: {
-		primary: { main: "rgb(28, 192, 224)" },
+		primary: { main: "rgb(185, 217, 235)" },
 		secondary: { main: "rgb(224, 121, 121)" },
-		deleteAction: { main: "rgb(224, 121, 121)" }
+		deleteAction: { main: "rgb(224, 121, 121)" },
+		ok: { main: "rgb(102 170 77)" }
 	}
 });
 
@@ -52,7 +56,10 @@ const MainWrapper = ({ children }) => {
 const App = () => {
 	return (
 		<MainWrapper>
-			<TodoLists style={{ margin: "1rem" }} />
+			<TodoLists style={{
+				margin: "1rem", background: "url(https://sellpy-public-assets.s3.amazonaws.com/webApp/sellerLanding/about/Abou_us_bck.svg)",
+				backgroundSize: "cover"
+			}} />
 		</MainWrapper>
 	);
 };

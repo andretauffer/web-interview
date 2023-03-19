@@ -4,43 +4,13 @@
         "title": "First List",
         "todos": [
             {
-                "0": "q",
-                "1": "s",
-                "2": "q",
-                "3": "s",
-                "4": "c",
-                "5": "q",
-                "6": "s",
-                "7": "c",
-                "8": "q",
-                "9": "s",
-                "10": "c",
-                "11": "q",
-                "12": "<",
-                "task": "something",
-                "done": true
+                "task": "Do this first!!!",
+                "done": false,
+                "deadline": 1679180400000
             },
             {
-                "0": "c",
-                "1": "z",
-                "2": "z",
-                "3": "x",
-                "4": "c",
-                "5": "z",
-                "6": "x",
-                "7": "c",
-                "8": "z",
-                "9": "x",
-                "10": "c",
-                "11": "z",
-                "12": "x",
-                "13": "c",
-                "14": "z",
-                "15": "x",
-                "16": "c",
-                "17": "z",
-                "task": "and this",
-                "deadline": 1678230000000,
+                "task": "Then do that!!!",
+                "deadline": 1679266800000,
                 "done": true
             }
         ]
@@ -50,16 +20,24 @@
         "title": "Second List",
         "todos": [
             {
-                "task": "zzzz",
-                "done": true
+                "task": "Done a long time ago",
+                "done": false,
+                "deadline": 1679180400000
             },
             {
-                "task": "cczxczxc",
-                "done": true
+                "task": "To be done now",
+                "done": true,
+                "deadline": 1679094000000
             },
             {
-                "task": "zxczxzxc",
-                "done": true
+                "task": "Do till the end of the month",
+                "done": true,
+                "deadline": 1680213600000
+            },
+            {
+                "task": "",
+                "done": true,
+                "deadline": null
             }
         ]
     }

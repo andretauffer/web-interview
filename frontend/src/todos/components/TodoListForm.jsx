@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useMemo, useRef } from "react";
 import { TextField, Card, CardContent, CardActions, Button, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -7,12 +7,8 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import Box from "@mui/material/Box";
-import { useTheme } from "@mui/material/styles";
-
 
 import { diff as diffVerify } from "deep-object-diff";
-import { useMemo } from "react";
-import { useRef } from "react";
 
 const todoSchema = {
 	type: "object",
@@ -33,6 +29,27 @@ const todoSchema = {
 	}
 };
 
+export const getTimeTillDeadline = (deadline, done) => {
+	const current = new Date().getTime();
+	const todaysMillis = current % (1000 * 60 * 60 * 24);
+	const deadlineMillisOffset = deadline % (1000 * 60 * 60 * 24);
+
+
+	const timeLeft = (deadline - deadlineMillisOffset) - (current - todaysMillis);
+	const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
+	const dateString = `${daysLeft}`;
+
+	if (dateString > 0) {
+		return `Deadline in ${dateString} day${Math.abs(dateString) > 1 ? "s" : ""}`;
+
+	} else if (dateString == 0) {
+		return "Deadline is today!";
+
+	} else if (!done) {
+		return `Task is late by ${Math.abs(dateString)} day${Math.abs(dateString) > 1 ? "s" : ""}`;
+	}
+};
+
 const ActionsContainer = ({ children, styles }) => {
 	return <Box sx={{
 		display: "flex",
@@ -47,13 +64,11 @@ const ActionsContainer = ({ children, styles }) => {
 
 export const TodoListForm = ({ todoList, saveTodoList }) => {
 	const [todos, setTodos] = useState(todoList.todos);
-	const theme = useTheme();
-	console.log("the theme", theme);
 
 	const hasDiff = useMemo(() => {
 		const diff = diffVerify(todoList.todos, todos);
 		return Object.keys(diff).length !== 0;
-	}, [todos, todoList]);
+	}, [todos, todoList.todos]);
 
 	const inputTimer = useRef(null);
 
@@ -75,12 +90,12 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
 		}, 1000);
 	}, [todos, saveTodoList, hasDiff]);
 
+
 	return (
 		<Card sx={{ margin: "0 1rem" }}>
 			<CardContent>
 				<Typography component='h2'>{todoList.title}</Typography>
 				<form
-					// onSubmit={handleSubmit}
 					style={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
 				>
 					{todos.map(({ task, done, deadline }, index) => (
@@ -105,58 +120,72 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
 										onChange={(event) => onChange({ index, todo: { ...todos[index], task: event.target.value } })}
 									/>
 									<Box sx={{ height: "20px" }} />
-									<Box sx={{
-										maxWidth: "200px",
-										display: "flex",
-										alignItems: "center"
-									}}>
-										<DatePicker
-											label="Deadline"
-											onChange={(date) => {
-												console.log("the date", date);
-												if (date) {
-													onChange({ index, todo: { ...todos[index], deadline: date.unix() * 1000 } });
-												}
-											}}
-											renderInput={(params) => <TextField {...params} />}
-											defaultValue={null}
-											value={deadline}
-										/>
-										<Box sx={{ width: "20px" }} />
-										<Box
-											title="Remove deadline"
-											sx={{ cursor: "pointer" }}
-											onClick={() => {
-												onChange({ index, todo: { ...todos[index], deadline: null } });
-											}}
-										>
-											<BackspaceIcon
-												sx={{
-													fill: theme.palette.deleteAction
+									<Box>
+										<Box sx={{
+											maxWidth: "400px",
+											display: "flex",
+											alignItems: "center"
+										}}>
+											<DatePicker
+												label="Deadline"
+												title={`Date picker for todo ${index}`}
+												id={`Date picker for todo ${index}`}
+												onChange={(date) => {
+													console.log("the new date", date);
+													if (date && date.unix()) {
+														console.log("the new date", date, date.unix());
+														onChange({ index, todo: { ...todos[index], deadline: date.unix() * 1000 } });
+													}
 												}}
-												color="deleteAction"
+												renderInput={(params) => <TextField {...params} />}
+												defaultValue={null}
+												value={deadline}
 											/>
+											<Box sx={{ width: "20px" }} />
+											<Box
+												title="Remove deadline"
+												sx={{ cursor: "pointer" }}
+												onClick={() => {
+													onChange({ index, todo: { ...todos[index], deadline: null } });
+												}}
+											>
+												{console.log("what is thw deadline then?", deadline)}
+												{deadline &&
+													<BackspaceIcon
+														color="deleteAction"
+													/>
+												}
+											</Box>
 										</Box>
+										{deadline &&
+											<Typography sx={{ margin: "8px" }} variant='p' title="time-till-deadline">
+												{getTimeTillDeadline(deadline, done)}
+											</Typography>}
 									</Box>
 								</ActionsContainer>
 								<ActionsContainer>
 									{done ?
 										<CheckBoxIcon
-											sx={{ margin: "0px auto" }}
+											sx={{ margin: "0px auto", cursor: "pointer" }}
 											title={todoSchema.properties.done.description}
 											onClick={() => onChange({ index, todo: { ...todos[index], done: false } })}
+											color="ok"
+											role="checkbox"
+											name={`checkbox-done-${index}`}
 										/>
 										:
 										<CheckBoxOutlineBlankIcon
-											sx={{ margin: "0px auto" }}
-											title={todoSchema.properties.done.description}
+											sx={{ margin: "0px auto", cursor: "pointer" }}
+											title={`checkbox-not-done-${index}`}
 											onClick={() => onChange({ index, todo: { ...todos[index], done: true } })}
+											role="checkbox"
+											name={`checkbox-not-done-${index}`}
 										/>}
 
 									<Box sx={{ height: "20px" }} />
 
 									<Button
-										sx={{ margin: "0px auto" }}
+										sx={{ margin: "0px auto", cursor: "pointer" }}
 										size='small'
 										color='deleteAction'
 										title={`Remove todo ${index}`}

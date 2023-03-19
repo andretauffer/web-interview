@@ -7,16 +7,27 @@ import {
 	ListItemText,
 	ListItemIcon,
 	Typography,
+	useTheme,
 } from "@mui/material";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import CircularProgress from "@mui/material/CircularProgress";
 import { TodoListForm } from "./TodoListForm";
+import CheckIcon from "@mui/icons-material/Check";
 
 const fetchTodoLists = () => {
 	return fetch("/lists").then(data => {
-		console.log("the data", data);
 		return data.json();
 	});
+};
+
+export const isListDone = (list) => {
+	if (list && list.todos.length) {
+		return list.todos.reduce((prev, curr) => {
+			if (!prev) return prev;
+			else return curr.done;
+		}, true);
+	}
+	return false;
 };
 
 export const TodoLists = ({ style }) => {
@@ -24,7 +35,9 @@ export const TodoLists = ({ style }) => {
 	const [loading, setLoading] = useState(false);
 	const [todoLists, setTodoLists] = useState({});
 	const [activeList, setActiveList] = useState();
-	console.log("them todo lists", todoLists);
+
+	const theme = useTheme();
+
 	useEffect(async () => {
 		setLoading(true);
 		try {
@@ -59,6 +72,7 @@ export const TodoLists = ({ style }) => {
 		setLoading(false);
 	};
 
+
 	return (
 		<Fragment>
 			<Card style={style}>
@@ -67,11 +81,21 @@ export const TodoLists = ({ style }) => {
 					<List>
 						{!Object.keys(todoLists).length && loading ? <Fragment><CircularProgress /></Fragment> :
 							Object.keys(todoLists).map((key) => (
-								<ListItemButton key={key} onClick={() => setActiveList(key)}>
+								<ListItemButton key={key} title={`Todo list ${key}`} onClick={() => setActiveList(key)}>
 									<ListItemIcon>
 										<ReceiptIcon />
 									</ListItemIcon>
 									<ListItemText primary={todoLists[key].title} />
+									{<CheckIcon
+										sx={{
+											transition: "all 0.5s linear",
+											stroke: theme.palette.ok.main,
+											strokeWidth: "2px",
+											strokeDasharray: 200,
+											strokeDashoffset: isListDone(todoLists[key]) ? 0 : 200,
+											fill: "transparent"
+										}}
+										color="transparent" title={`checkmark-${key}`} />}
 								</ListItemButton>
 							))}
 					</List>
