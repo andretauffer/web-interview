@@ -7,7 +7,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import Box from "@mui/material/Box";
-
+import moment from "moment";
 import { diff as diffVerify } from "deep-object-diff";
 
 const todoSchema = {
@@ -31,10 +31,16 @@ const todoSchema = {
 
 export const getTimeTillDeadline = (deadline, done) => {
 	const current = new Date().getTime();
-	const todaysMillis = current % (1000 * 60 * 60 * 24);
-	const deadlineMillisOffset = deadline % (1000 * 60 * 60 * 24);
+	const timeZoneOffsetCurrent = moment(current).utcOffset();
+	const timeZoneOffsetDeadline = moment(deadline).utcOffset();
+	const localDeadline = deadline + (timeZoneOffsetDeadline * 60 * 1000);
+	const localCurrent = current + (timeZoneOffsetCurrent * 60 * 1000);
 
-	const timeLeft = (deadline - deadlineMillisOffset) - (current - todaysMillis);
+	const todaysMillis = localCurrent % (1000 * 60 * 60 * 24);
+	const deadlineMillisOffset = localDeadline % (1000 * 60 * 60 * 24);
+
+
+	const timeLeft = (localDeadline - deadlineMillisOffset) - (localCurrent - todaysMillis);
 	const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
 	const dateString = `${daysLeft}`;
 
@@ -131,8 +137,8 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
 												id={`Date picker for todo ${index}`}
 												onChange={(date) => {
 													if (date && date.unix()) {
-														const timeZoneOffset = date.utcOffset();
-														onChange({ index, todo: { ...todos[index], deadline: date.unix() * 1000 + (timeZoneOffset * 60 * 1000) } });
+														// const timeZoneOffset = date.utcOffset();
+														onChange({ index, todo: { ...todos[index], deadline: date.unix() * 1000 } });
 													}
 												}}
 												renderInput={(params) => <TextField {...params} />}
