@@ -4,14 +4,9 @@
         "title": "First List",
         "todos": [
             {
-                "task": "Do this first!!!",
-                "done": false,
-                "deadline": 1679180400000
-            },
-            {
                 "task": "Then do that!!!",
-                "deadline": 1679266800000,
-                "done": true
+                "deadline": 1679281200000,
+                "done": false
             }
         ]
     },
