@@ -13,6 +13,7 @@ const getLists = async (_, res) => {
 
     res.send(lists);
   } catch (error) {
+    console.error("Failed to get lists", error);
 
     res.send({ error });
   }
@@ -28,6 +29,7 @@ const getList = async (req, res) => {
 
     res.send(list);
   } catch (error) {
+    console.error("Failed to get list by id", error);
 
     res.send({ error });
   }
@@ -44,6 +46,7 @@ const postList = async (req, res) => {
 
     res.send({ id });
   } catch (error) {
+    console.error("Failed to post list", error);
 
     res.send({ error });
   }
@@ -60,7 +63,7 @@ const putList = async (req, res) => {
 
     res.send({ id });
   } catch (error) {
-    console.error("Faile to put list", error);
+    console.error("Failed to put list", error);
     res.send({ error });
   }
 };
@@ -71,7 +74,7 @@ const deleteList = async (req, res) => {
 
     res.sendStatus(200);
   } catch (error) {
-    console.error("Faile to put list", error);
+    console.error("Failed to put list", error);
     res.send({ error });
   }
 };
